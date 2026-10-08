@@ -1,8 +1,9 @@
 # Microsoft Foundry agent with a service principal
 
 This Python sample invokes an existing Microsoft Foundry prompt agent through
-the Responses API. Authentication uses
-`ClientSecretCredential`, so no interactive user sign-in is required.
+the Microsoft Agent Framework `FoundryAgent` SDK. Application code does not
+use the OpenAI Responses client. Authentication uses `ClientSecretCredential`,
+so no interactive user sign-in is required.
 
 ## Prerequisites
 
@@ -64,10 +65,9 @@ commit because it contains placeholders only.
 ## MCP tool consent
 
 The service principal authenticates the application to the Foundry project.
-An agent tool can require separate authorization. If the response contains an
-OAuth consent request, the script prints the tool name and consent URL instead
-of displaying an empty response. Complete that consent and run the command
-again.
+An agent tool can require separate authorization. The Foundry SDK surfaces
+tool authentication and configuration failures as explicit exceptions instead
+of returning an empty response.
 
 For unattended service-principal execution, configure the MCP connection with
 application authentication supported by that server instead of delegated user
@@ -76,5 +76,6 @@ OAuth.
 ## References
 
 - [Microsoft Foundry Agent Service](https://learn.microsoft.com/azure/foundry/agents/overview)
+- [Agent Framework integration with Microsoft Foundry](https://learn.microsoft.com/agent-framework/integrations/by-component/agent-services/foundry)
 - [Azure Identity client secret credential](https://learn.microsoft.com/python/api/azure-identity/azure.identity.clientsecretcredential)
 - [Foundry role-based access control](https://learn.microsoft.com/azure/foundry/concepts/rbac-foundry)

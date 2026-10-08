@@ -2,13 +2,9 @@ import os
 import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from types import SimpleNamespace
-from typing import cast
 from unittest.mock import patch
 
-from openai.types.responses import Response
-
-from foundry_agent import Settings, extract_response_text, load_environment
+from foundry_agent import Settings, load_environment
 
 
 class SettingsTests(unittest.TestCase):
@@ -62,38 +58,5 @@ class SettingsTests(unittest.TestCase):
                 ".*FOUNDRY_PROJECT_ENDPOINT.*FOUNDRY_AGENT_NAME",
             ):
                 Settings.from_environment()
-
-
-class ResponseTests(unittest.TestCase):
-    def test_returns_response_output_text(self) -> None:
-        response = cast(
-            Response,
-            SimpleNamespace(output_text="answer", output=[], status="completed"),
-        )
-
-        self.assertEqual(extract_response_text(response), "answer")
-
-    def test_reports_oauth_consent_request(self) -> None:
-        consent_request = SimpleNamespace(
-            type="oauth_consent_request",
-            server_label="DatabricksF1",
-            consent_link="https://example.test/consent",
-        )
-        response = cast(
-            Response,
-            SimpleNamespace(
-                output_text="",
-                output=[consent_request],
-                status="completed",
-            ),
-        )
-
-        with self.assertRaisesRegex(
-            RuntimeError,
-            "(?s)DatabricksF1.*requires OAuth consent.*https://example.test/consent",
-        ):
-            extract_response_text(response)
-
-
 if __name__ == "__main__":
     unittest.main()
